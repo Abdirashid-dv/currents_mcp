@@ -1,0 +1,11 @@
+# Currents API MCP Server Dependencies
+# Core MCP framework
+fastmcp>=2.0.0
+
+# HTTP client for API requests
+httpx>=0.25.0
+
+# Date parsing utilities
+python-dateutil>=2.8.0
+
+python-dotenv>=1.0.0

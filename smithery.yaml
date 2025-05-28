@@ -1,0 +1,131 @@
+startCommand:
+    type: stdio
+    configSchema:
+        type: object
+        required: ["apiKey"]
+        properties:
+            apiKey:
+                type: string
+                title: "Currents API Key"
+                description: "Get your free API key from https://currentsapi.services/signup/free"
+            defaultLanguage:
+                type: string
+                title: "Default Language"
+                default: "en"
+                enum:
+                    [
+                        "en",
+                        "fr",
+                        "de",
+                        "es",
+                        "it",
+                        "pt",
+                        "ru",
+                        "ar",
+                        "zh",
+                        "ja",
+                        "ko",
+                        "hi",
+                        "nl",
+                        "fi",
+                        "msa",
+                    ]
+            timeout:
+                type: number
+                title: "API Timeout (seconds)"
+                default: 15
+                minimum: 10
+                maximum: 30
+            maxResults:
+                type: number
+                title: "Maximum Results Per Query"
+                default: 20
+                minimum: 1
+                maximum: 100
+    commandFunction: |-
+        (config) => ({
+          "command": "python",
+          "args": ["currents_server.py"],
+          "env": {
+            "CURRENTS_API_KEY": config.apiKey,
+            "DEFAULT_LANGUAGE": config.defaultLanguage || "en",
+            "API_TIMEOUT": config.timeout ? config.timeout.toString() : "15",
+            "MAX_RESULTS": config.maxResults ? config.maxResults.toString() : "20"
+          }
+        })
+
+# Metadata for Smithery marketplace
+metadata:
+    name: "Currents News API"
+    description: "Professional news search and retrieval MCP server using Currents API"
+    version: "1.0.0"
+    author: "MCP Workshop"
+    tags:
+        - "news"
+        - "api"
+        - "search"
+        - "journalism"
+        - "current-events"
+
+    # Documentation links
+    documentation: "https://currentsapi.services/docs"
+    repository: "https://github.com/your-username/currents-mcp"
+
+    # Feature highlights
+    features:
+        - "Multi-language news search (15+ languages)"
+        - "Category-based filtering"
+        - "Date range searches"
+        - "Geographic filtering by country"
+        - "Real-time latest news"
+        - "Smart caching for performance"
+        - "Rate limiting awareness"
+        - "Comprehensive error handling"
+
+    # API information
+    apiProvider:
+        name: "Currents API"
+        website: "https://currentsapi.services"
+        pricing: "Free tier: 600 requests/hour"
+        signup: "https://currentsapi.services/register"
+
+    # Usage examples
+    examples:
+        - title: "Search Technology News"
+          description: "Find latest technology articles"
+          parameters:
+              tool: "search_news"
+              keywords: "artificial intelligence"
+              language: "en"
+              category: "technology"
+
+        - title: "Get Latest French News"
+          description: "Retrieve recent news in French"
+          parameters:
+              tool: "get_latest_news"
+              language: "fr"
+
+        - title: "Search by Date Range"
+          description: "Find news within specific timeframe"
+          parameters:
+              tool: "search_news"
+              keywords: "climate change"
+              start_date: "2025-05-01T00:00:00+00:00"
+              end_date: "2025-05-28T23:59:59+00:00"
+
+# Resource requirements
+resources:
+    memory: "128Mi"
+    cpu: "100m"
+
+# Health check configuration
+healthCheck:
+    enabled: true
+    endpoint: "check_api_status"
+    interval: 300 # 5 minutes
+    timeout: 10
+
+# Logging configuration
+logging:
+    level: "INFO"
+    format: "json"
